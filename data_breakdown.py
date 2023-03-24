@@ -1,11 +1,11 @@
 
-def data_extractor():
+def data_extractor(input_file, data_file, characters_file):
     """
     Extracts data from 'input.txt'. For every consecutive pair of dialogue,
     create a dictionary with "speaker 1", "speaker 2" and "dialogue" as keys.
     Append the dictionary to a list.
     """
-    with open("input.txt", "r") as f:
+    with open(input_file, "r") as f:
         data = f.readlines()
     # Create a data array with every block of text, breaking at every new line.
     data = [x.strip() for x in data]
@@ -33,8 +33,8 @@ def data_extractor():
         if (len(pair) < 2 or len(pair[0]) < 2 or len(pair[1]) < 2):
             continue
         # First, we extract both speakers
-        speaker1 = pair[0][0].split(":")[0]
-        speaker2 = pair[1][0].split(":")[0]
+        speaker1 = pair[0][0].split(":")[0].strip().upper()
+        speaker2 = pair[1][0].split(":")[0].strip().upper()
 
         characters.add(speaker1)
         characters.add(speaker2)
@@ -58,11 +58,12 @@ def data_extractor():
     print(len(dictionary))
     # Save the dictionary to a json file
     import json
-    with open("data.json", "w") as f:
+    with open(data_file, "w") as f:
         json.dump(dictionary, f)
 
     # Save the characters in characters.txt
-    with open('characters.txt', 'w') as f:
+    with open(characters_file, 'w') as f:
         f.write("\n".join(characters))
+
 if __name__ == "__main__":
-    data_extractor()
+    data_extractor('input.txt', 'data.json', 'characters.txt')
